@@ -1,0 +1,44 @@
+add.sh
+#!/bin/bash
+
+echo "Music path: "; read music_path
+echo "Links path: "; read links_path
+
+for catalog in $(ls "${music_path}"); do
+path="${music_path}/${catalog}"
+
+poet=$(cat "${path}/poet.txt");
+composer=$(cat "${path}/composer.txt");
+genre=$(cat "${path}/genre.txt");
+perfomer=$(cat "${path}/performer.txt");
+
+mkdir -p "${links_path}/poets/${poet}"
+mkdir -p "${links_path}/composers/${composer}"
+mkdir -p "${links_path}/genres/${genre}"
+mkdir -p "${links_path}/performers/${perfomer}"
+
+mp3_path=$(find ${path} -type f -name "*.mp3")
+ln -s $mp3_path "${links_path}/poets/${poet}"
+ln -s $mp3_path "${links_path}/composers/${composer}"
+ln -s $mp3_path "${links_path}/genres/${genre}"
+ln -s $mp3_path "${links_path}/performers/${perfomer}"
+
+done
+
+find.sh
+#!/bin/bash
+
+echo "Enter composer: "; read composer;
+echo "Enter poet: "; read poet;
+
+composers_path="./res/composers/${composer}"
+poets_path="./res/poets/${poet}"
+
+ls $composers_path > c.txt
+ls $poets_path > p.txt
+
+grep -F -f c.txt p.txt > r.txt
+
+cat r.txt
+
+rm c.txt p.txt r.txt
